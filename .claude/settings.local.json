@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mysql -u test.com -ptest.com -e \"SHOW TABLES FROM \\\\`test.com\\\\`;\")",
+      "Bash(find /d/phpstudy_pro -name \"mysql.exe\" -type f 2>/dev/null | head -5)",
+      "Read(//d/phpstudy_pro/**)",
+      "Bash(ls /d/phpstudy_pro/ 2>/dev/null)",
+      "Read(//d/phpstudy_pro//**)",
+      "Bash(\"/d/phpstudy_pro/Extensions/MySQL8.0.12/bin/mysql.exe\" -u \"test.com\" -p\"test.com\" -e \"USE \\\\`test.com\\\\`; SELECT post_title, post_type, post_status, post_content FROM wp_posts WHERE post_type IN \\('page','post'\\) AND post_status='publish' AND post_title!='' ORDER BY post_type, menu_order;\")",
+      "Bash(\"/d/phpstudy_pro/Extensions/MySQL8.0.12/bin/mysql.exe\" -u \"test.com\" -p\"test.com\" -e \"USE \\\\`test.com\\\\`; SELECT option_name, option_value FROM wp_options WHERE option_name IN \\('siteurl', 'home', 'blogname', 'blogdescription', 'admin_email'\\) ORDER BY option_name;\")",
+      "Bash(mkdir -p /d/phpstudy_pro/WWW/test.com/assets/css /d/phpstudy_pro/WWW/test.com/assets/js /d/phpstudy_pro/WWW/test.com/assets/images)",
+      "Bash(python -c ' *)",
+      "Bash(git init *)",
+      "Bash(git add *)"
+    ],
+    "additionalDirectories": [
+      "D:\\phpstudy_pro\\WWW\\test.com\\assets"
+    ]
+  }
+}
