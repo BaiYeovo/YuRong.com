@@ -11,7 +11,9 @@
       "Bash(mkdir -p /d/phpstudy_pro/WWW/test.com/assets/css /d/phpstudy_pro/WWW/test.com/assets/js /d/phpstudy_pro/WWW/test.com/assets/images)",
       "Bash(python -c ' *)",
       "Bash(git init *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git tag *)"
     ],
     "additionalDirectories": [
       "D:\\phpstudy_pro\\WWW\\test.com\\assets"

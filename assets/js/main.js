@@ -1,5 +1,6 @@
 /**
  * 裕荣机电（大连）有限公司 - 前台交互脚本
+ * Yu Rong Mechanical and Electrical (Dalian) Co., Ltd.
  */
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -137,4 +138,100 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // --- Image Lightbox ---
+  initLightbox();
+
 });
+
+/**
+ * Initialize lightbox: all images marked with data-lightbox attribute
+ * are clickable to view in a full-screen overlay.
+ */
+function initLightbox() {
+  // Collect all lightbox-eligible images
+  var lightboxImages = document.querySelectorAll('img[data-lightbox]');
+  if (lightboxImages.length === 0) return;
+
+  // Build lightbox DOM once
+  var lightbox = document.createElement('div');
+  lightbox.className = 'lightbox';
+  lightbox.setAttribute('aria-label', '图片预览');
+  lightbox.innerHTML =
+    '<div class="lightbox-img-wrap">' +
+      '<button class="lightbox-close" aria-label="关闭">&times;</button>' +
+      '<img src="" alt="" />' +
+      '<p class="lightbox-caption"></p>' +
+    '</div>' +
+    '<button class="lightbox-nav lightbox-prev" aria-label="上一张">&#10094;</button>' +
+    '<button class="lightbox-nav lightbox-next" aria-label="下一张">&#10095;</button>';
+  document.body.appendChild(lightbox);
+
+  var lightboxImg = lightbox.querySelector('.lightbox-img-wrap img');
+  var lightboxCaption = lightbox.querySelector('.lightbox-caption');
+  var lightboxClose = lightbox.querySelector('.lightbox-close');
+  var lightboxPrev = lightbox.querySelector('.lightbox-prev');
+  var lightboxNext = lightbox.querySelector('.lightbox-next');
+  var currentIndex = -1;
+
+  function openLightbox(index) {
+    if (index < 0 || index >= lightboxImages.length) return;
+    currentIndex = index;
+    var img = lightboxImages[currentIndex];
+    lightboxImg.src = img.src;
+    lightboxImg.alt = img.alt || '';
+    lightboxCaption.textContent = img.alt || '';
+    lightbox.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    updateNavVisibility();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = '';
+    // Clear src after transition to free memory
+    setTimeout(function() {
+      if (!lightbox.classList.contains('open')) {
+        lightboxImg.src = '';
+      }
+    }, 300);
+  }
+
+  function showPrev(e) {
+    e.stopPropagation();
+    if (currentIndex > 0) openLightbox(currentIndex - 1);
+  }
+
+  function showNext(e) {
+    e.stopPropagation();
+    if (currentIndex < lightboxImages.length - 1) openLightbox(currentIndex + 1);
+  }
+
+  function updateNavVisibility() {
+    lightboxPrev.style.display = currentIndex > 0 ? '' : 'none';
+    lightboxNext.style.display = currentIndex < lightboxImages.length - 1 ? '' : 'none';
+  }
+
+  // Attach click handlers to each lightbox image
+  lightboxImages.forEach(function(img, index) {
+    img.addEventListener('click', function(e) {
+      e.preventDefault();
+      openLightbox(index);
+    });
+  });
+
+  // Close events
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+  lightboxPrev.addEventListener('click', showPrev);
+  lightboxNext.addEventListener('click', showNext);
+
+  // Keyboard navigation
+  document.addEventListener('keydown', function(e) {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') showPrev(e);
+    if (e.key === 'ArrowRight') showNext(e);
+  });
+}
