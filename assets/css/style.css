@@ -550,7 +550,9 @@ img { max-width: 100%; height: auto; display: block; }
   gap: 16px;
 }
 .about-sidebar .license-imgs img {
-  max-width: 160px;
+  max-width: 200px;
+  max-height: 260px;
+  object-fit: contain;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }

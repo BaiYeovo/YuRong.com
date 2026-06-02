@@ -13,7 +13,9 @@
       "Bash(git init *)",
       "Bash(git add *)",
       "Bash(git commit *)",
-      "Bash(git tag *)"
+      "Bash(git tag *)",
+      "Bash(file assets/images/license-1.jpg assets/images/license-2.jpg)",
+      "Bash(identify assets/images/license-1.jpg assets/images/license-2.jpg)"
     ],
     "additionalDirectories": [
       "D:\\phpstudy_pro\\WWW\\test.com\\assets"
