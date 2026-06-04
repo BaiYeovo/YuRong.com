@@ -111,33 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   animateCounters();
 
-  // --- Contact Form ---
-  var contactForm = document.querySelector('.contact-form form');
-  if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      var btn = contactForm.querySelector('button[type="submit"]');
-      var originalText = btn.textContent;
-      btn.textContent = '发送中...';
-      btn.disabled = true;
-
-      // Simulate submission (no backend needed)
-      setTimeout(function() {
-        btn.textContent = '✓ 已发送！';
-        btn.style.background = '#2ecc71';
-        btn.style.borderColor = '#2ecc71';
-        contactForm.reset();
-
-        setTimeout(function() {
-          btn.textContent = originalText;
-          btn.style.background = '';
-          btn.style.borderColor = '';
-          btn.disabled = false;
-        }, 2500);
-      }, 800);
-    });
-  }
-
   // --- Partners Carousel ---
   initPartnersCarousel();
 
