@@ -138,10 +138,149 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  // --- Partners Carousel ---
+  initPartnersCarousel();
+
   // --- Image Lightbox ---
   initLightbox();
 
 });
+
+/**
+ * Initialize partners carousel: horizontal auto-scrolling logo slider.
+ * Adapts visible slide count to viewport width on resize.
+ */
+function initPartnersCarousel() {
+  var carousel = document.querySelector('[data-carousel]');
+  if (!carousel) return;
+
+  var track = carousel.querySelector('[data-carousel-track]');
+  var viewport = carousel.querySelector('[data-carousel-viewport]');
+  var prevBtn = carousel.querySelector('[data-carousel-prev]');
+  var nextBtn = carousel.querySelector('[data-carousel-next]');
+  var slides = track.querySelectorAll('.carousel-slide');
+  if (slides.length === 0) return;
+
+  var currentIndex = 0;
+  var visibleCount = getVisibleCount();
+  var maxIndex = Math.max(0, slides.length - visibleCount);
+  var autoTimer = null;
+  var isTransitioning = false;
+
+  function getVisibleCount() {
+    var w = viewport.clientWidth;
+    if (w <= 576) return 2;
+    if (w <= 992) return 3;
+    return 5;
+  }
+
+  function getSlideWidth() {
+    var gap = parseInt(getComputedStyle(track).gap) || 24;
+    return (viewport.clientWidth + gap) / visibleCount;
+  }
+
+  function goTo(index) {
+    if (isTransitioning) return;
+    currentIndex = Math.max(0, Math.min(index, maxIndex));
+    var offset = currentIndex * getSlideWidth();
+    track.style.transform = 'translateX(-' + offset + 'px)';
+  }
+
+  function goNext() {
+    isTransitioning = true;
+    if (currentIndex >= maxIndex) {
+      // Loop back to start
+      currentIndex = 0;
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(0)';
+      // Force reflow
+      track.offsetHeight;
+      track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
+    } else {
+      currentIndex++;
+      var offset = currentIndex * getSlideWidth();
+      track.style.transform = 'translateX(-' + offset + 'px)';
+    }
+    setTimeout(function() { isTransitioning = false; }, 500);
+  }
+
+  function goPrev() {
+    isTransitioning = true;
+    if (currentIndex <= 0) {
+      // Jump to end
+      currentIndex = maxIndex;
+      track.style.transition = 'none';
+      track.style.transform = 'translateX(-' + (currentIndex * getSlideWidth()) + 'px)';
+      track.offsetHeight;
+      track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
+    } else {
+      currentIndex--;
+      var offset = currentIndex * getSlideWidth();
+      track.style.transform = 'translateX(-' + offset + 'px)';
+    }
+    setTimeout(function() { isTransitioning = false; }, 500);
+  }
+
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(goNext, 3500);
+  }
+
+  function stopAuto() {
+    if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  }
+
+  function recalc() {
+    visibleCount = getVisibleCount();
+    maxIndex = Math.max(0, slides.length - visibleCount);
+    if (currentIndex > maxIndex) currentIndex = maxIndex;
+    track.style.transition = 'none';
+    track.style.transform = 'translateX(-' + (currentIndex * getSlideWidth()) + 'px)';
+    track.offsetHeight;
+    track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
+  }
+
+  // Events
+  prevBtn.addEventListener('click', function() {
+    stopAuto();
+    goPrev();
+    startAuto();
+  });
+  nextBtn.addEventListener('click', function() {
+    stopAuto();
+    goNext();
+    startAuto();
+  });
+  carousel.addEventListener('mouseenter', stopAuto);
+  carousel.addEventListener('mouseleave', startAuto);
+
+  // Touch swipe
+  var touchStartX = 0;
+  var touchEndX = 0;
+  viewport.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+  viewport.addEventListener('touchend', function(e) {
+    touchEndX = e.changedTouches[0].screenX;
+    var diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      stopAuto();
+      if (diff > 0) goNext();
+      else goPrev();
+      startAuto();
+    }
+  }, { passive: true });
+
+  // Resize
+  var resizeDebounce;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeDebounce);
+    resizeDebounce = setTimeout(recalc, 150);
+  });
+
+  // Init
+  startAuto();
+}
 
 /**
  * Initialize lightbox: all images marked with data-lightbox attribute

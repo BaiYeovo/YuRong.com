@@ -15,7 +15,13 @@
       "Bash(git commit *)",
       "Bash(git tag *)",
       "Bash(file assets/images/license-1.jpg assets/images/license-2.jpg)",
-      "Bash(identify assets/images/license-1.jpg assets/images/license-2.jpg)"
+      "Bash(identify assets/images/license-1.jpg assets/images/license-2.jpg)",
+      "WebSearch",
+      "Bash(rm \"d:\\\\Code\\\\YuRong.com\\\\.claude\\\\skills\\\\static-web-dev.md\")",
+      "Bash(rmdir \"d:\\\\Code\\\\YuRong.com\\\\.claude\\\\skills\")",
+      "Bash(uvx agent-superpowers *)",
+      "Bash(git -C /d/Code/YuRong.com log --oneline -20)",
+      "Bash(git -C /d/Code/YuRong.com status)"
     ],
     "additionalDirectories": [
       "D:\\phpstudy_pro\\WWW\\test.com\\assets"
