@@ -886,13 +886,8 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* --- Contact Page --- */
 .contact-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 36px;
-}
-
-@media (max-width: 768px) {
-  .contact-grid { grid-template-columns: 1fr; }
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 .contact-card {
