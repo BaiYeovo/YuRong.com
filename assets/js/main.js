@@ -147,8 +147,14 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Initialize partners carousel: horizontal auto-scrolling logo slider.
- * Adapts visible slide count to viewport width on resize.
+ * Initialize partners carousel: infinite horizontal auto-scrolling logo slider.
+ *
+ * Key design decisions:
+ * - Slide widths are set in JS (px) so that the computed flex-basis matches our
+ *   transform offsets exactly — avoids the circular-dependency issue of CSS
+ *   percentage-based flex-basis on an auto-sized flex container.
+ * - Clone-based infinite looping: last N slides cloned to front, first N to end.
+ * - transitionend (filtered by target + propertyName) drives wrap-around jumps.
  */
 function initPartnersCarousel() {
   var carousel = document.querySelector('[data-carousel]');
@@ -158,14 +164,19 @@ function initPartnersCarousel() {
   var viewport = carousel.querySelector('[data-carousel-viewport]');
   var prevBtn = carousel.querySelector('[data-carousel-prev]');
   var nextBtn = carousel.querySelector('[data-carousel-next]');
-  var slides = track.querySelectorAll('.carousel-slide');
-  if (slides.length === 0) return;
 
-  var currentIndex = 0;
-  var visibleCount = getVisibleCount();
-  var maxIndex = Math.max(0, slides.length - visibleCount);
+  var originalSlides = Array.from(track.querySelectorAll('.carousel-slide'));
+  var totalReal = originalSlides.length;
+  if (totalReal === 0) return;
+
+  var visibleCount = 0;
+  var slideWidth = 0;       // measured px step from one slide to the next (slide + gap)
+  var realStartOffset = 0;  // px offset of originalSlides[0] from track left edge
+  var currentIndex = 0;     // 0 = first real slide, totalReal-1 = last real slide
   var autoTimer = null;
   var isTransitioning = false;
+
+  // --- Helpers ---
 
   function getVisibleCount() {
     var w = viewport.clientWidth;
@@ -174,52 +185,107 @@ function initPartnersCarousel() {
     return 5;
   }
 
-  function getSlideWidth() {
+  /** Set explicit flex-basis (px) on every slide so JS & CSS agree on widths. */
+  function applySlideWidths() {
     var gap = parseInt(getComputedStyle(track).gap) || 24;
-    return (viewport.clientWidth + gap) / visibleCount;
+    // Total gap space for visibleCount slides = (visibleCount-1) gaps
+    var avail = viewport.clientWidth - (visibleCount - 1) * gap;
+    var w = Math.floor(avail / visibleCount);
+    var allSlides = track.querySelectorAll('.carousel-slide');
+    allSlides.forEach(function(s) {
+      s.style.flexBasis = w + 'px';
+      s.style.minWidth = w + 'px';
+    });
   }
 
-  function goTo(index) {
-    if (isTransitioning) return;
-    currentIndex = Math.max(0, Math.min(index, maxIndex));
-    var offset = currentIndex * getSlideWidth();
-    track.style.transform = 'translateX(-' + offset + 'px)';
+  /** Measure the actual rendered step between two adjacent slides. */
+  function measureDimensions() {
+    var s0 = originalSlides[0];
+    var s1 = originalSlides[1];
+    if (!s0 || !s1) return;
+    var r0 = s0.getBoundingClientRect();
+    var r1 = s1.getBoundingClientRect();
+    var trackLeft = track.getBoundingClientRect().left;
+    slideWidth = r1.left - r0.left;
+    realStartOffset = r0.left - trackLeft;
   }
+
+  // --- Clone management ---
+
+  function removeClones() {
+    var allSlides = track.querySelectorAll('.carousel-slide');
+    allSlides.forEach(function(el) {
+      if (originalSlides.indexOf(el) === -1) el.remove();
+    });
+  }
+
+  function buildClones() {
+    removeClones();
+    var n = visibleCount;
+    // Prepend last n real slides
+    for (var i = totalReal - n; i < totalReal; i++) {
+      track.insertBefore(originalSlides[i].cloneNode(true), originalSlides[0]);
+    }
+    // Append first n real slides
+    for (var j = 0; j < n; j++) {
+      track.appendChild(originalSlides[j].cloneNode(true));
+    }
+  }
+
+  // --- Positioning ---
+
+  /** px offset for a given real-slide index (can be negative or >= totalReal for clone zones). */
+  function offsetForIndex(idx) {
+    return realStartOffset + idx * slideWidth;
+  }
+
+  function positionTrack(instant) {
+    track.style.transition = instant ? 'none' : 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
+    track.style.transform = 'translateX(-' + offsetForIndex(currentIndex) + 'px)';
+  }
+
+  // --- Wrap-around via transitionend ---
+
+  function onTransitionEnd(e) {
+    if (e.target !== track) return;
+    if (e.propertyName !== 'transform') return;
+    isTransitioning = false;
+
+    // Scrolled into the "after" clone zone → jump to real start
+    if (currentIndex >= totalReal) {
+      track.style.transition = 'none';
+      currentIndex = 0;
+      track.style.transform = 'translateX(-' + offsetForIndex(currentIndex) + 'px)';
+      void track.offsetHeight;
+    }
+    // Scrolled into the "before" clone zone → jump to real end
+    else if (currentIndex < 0) {
+      track.style.transition = 'none';
+      currentIndex = totalReal - 1;
+      track.style.transform = 'translateX(-' + offsetForIndex(currentIndex) + 'px)';
+      void track.offsetHeight;
+    }
+  }
+
+  track.addEventListener('transitionend', onTransitionEnd);
+
+  // --- Navigation ---
 
   function goNext() {
+    if (isTransitioning) return;
     isTransitioning = true;
-    if (currentIndex >= maxIndex) {
-      // Loop back to start
-      currentIndex = 0;
-      track.style.transition = 'none';
-      track.style.transform = 'translateX(0)';
-      // Force reflow
-      track.offsetHeight;
-      track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
-    } else {
-      currentIndex++;
-      var offset = currentIndex * getSlideWidth();
-      track.style.transform = 'translateX(-' + offset + 'px)';
-    }
-    setTimeout(function() { isTransitioning = false; }, 500);
+    currentIndex++;
+    positionTrack(false);
   }
 
   function goPrev() {
+    if (isTransitioning) return;
     isTransitioning = true;
-    if (currentIndex <= 0) {
-      // Jump to end
-      currentIndex = maxIndex;
-      track.style.transition = 'none';
-      track.style.transform = 'translateX(-' + (currentIndex * getSlideWidth()) + 'px)';
-      track.offsetHeight;
-      track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
-    } else {
-      currentIndex--;
-      var offset = currentIndex * getSlideWidth();
-      track.style.transform = 'translateX(-' + offset + 'px)';
-    }
-    setTimeout(function() { isTransitioning = false; }, 500);
+    currentIndex--;
+    positionTrack(false);
   }
+
+  // --- Auto-play ---
 
   function startAuto() {
     stopAuto();
@@ -230,17 +296,29 @@ function initPartnersCarousel() {
     if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
   }
 
+  // --- Resize rebuild ---
+
   function recalc() {
+    stopAuto();
+    isTransitioning = false;
+
     visibleCount = getVisibleCount();
-    maxIndex = Math.max(0, slides.length - visibleCount);
-    if (currentIndex > maxIndex) currentIndex = maxIndex;
+    applySlideWidths();
+    buildClones();
+
+    // Force layout, then re-measure
     track.style.transition = 'none';
-    track.style.transform = 'translateX(-' + (currentIndex * getSlideWidth()) + 'px)';
-    track.offsetHeight;
-    track.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
+    track.style.transform = 'translateX(0)';
+    void track.offsetHeight;
+    measureDimensions();
+
+    currentIndex = 0;
+    positionTrack(true);
+    startAuto();
   }
 
-  // Events
+  // --- Button events ---
+
   prevBtn.addEventListener('click', function() {
     stopAuto();
     goPrev();
@@ -251,17 +329,20 @@ function initPartnersCarousel() {
     goNext();
     startAuto();
   });
+
+  // --- Hover pause ---
+
   carousel.addEventListener('mouseenter', stopAuto);
   carousel.addEventListener('mouseleave', startAuto);
 
-  // Touch swipe
+  // --- Touch swipe ---
+
   var touchStartX = 0;
-  var touchEndX = 0;
   viewport.addEventListener('touchstart', function(e) {
     touchStartX = e.changedTouches[0].screenX;
   }, { passive: true });
   viewport.addEventListener('touchend', function(e) {
-    touchEndX = e.changedTouches[0].screenX;
+    var touchEndX = e.changedTouches[0].screenX;
     var diff = touchStartX - touchEndX;
     if (Math.abs(diff) > 50) {
       stopAuto();
@@ -271,14 +352,28 @@ function initPartnersCarousel() {
     }
   }, { passive: true });
 
-  // Resize
+  // --- Resize ---
+
   var resizeDebounce;
   window.addEventListener('resize', function() {
     clearTimeout(resizeDebounce);
     resizeDebounce = setTimeout(recalc, 150);
   });
 
-  // Init
+  // --- Init ---
+
+  visibleCount = getVisibleCount();
+  applySlideWidths();
+  buildClones();
+
+  // Force a clean layout, then measure actual DOM positions
+  track.style.transition = 'none';
+  track.style.transform = 'translateX(0)';
+  void track.offsetHeight;
+  measureDimensions();
+
+  currentIndex = 0;  // first real slide
+  positionTrack(true);
   startAuto();
 }
 
