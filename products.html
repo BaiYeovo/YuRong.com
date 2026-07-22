@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="产品中心 - 裕荣机电代理的胶水、涂料、油品、医疗、节能、磁石六大产品线，涵盖热熔胶、水性胶、溶剂胶、环氧、聚氨酯等工程胶粘剂">
   <title>产品中心 - 裕荣机电（大连）有限公司</title>
+  <link rel="canonical" href="products.html">
+  <link rel="alternate" hreflang="zh-CN" href="products.html">
+  <link rel="alternate" hreflang="en" href="en/products.html">
+  <link rel="alternate" hreflang="x-default" href="products.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="产品中心 - 裕荣机电（大连）有限公司">
+  <meta property="og:description" content="浏览胶水、涂料、油品、医疗、节能和磁石六大产品线。">
+  <meta property="og:url" content="products.html">
+  <meta property="og:image" content="assets/images/adhesives.webp">
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="icon" type="image/svg+xml" href="assets/images/LOGO_2.svg">
 </head>
@@ -13,13 +22,13 @@
 <header class="site-header">
   <div class="header-inner">
     <a href="index.html" class="logo">
-      <img src="assets/images/LOGO.svg" alt="裕荣机电 Logo" onerror="this.style.display='none'">
+      <img src="assets/images/LOGO.svg" alt="裕荣机电 Logo">
       <span>裕荣机电（大连）有限公司</span>
     </a>
-    <button class="hamburger" aria-label="菜单">
+    <button class="hamburger" aria-label="菜单" aria-expanded="false" aria-controls="primary-nav">
       <span></span><span></span><span></span>
     </button>
-    <nav class="nav-links">
+    <nav id="primary-nav" class="nav-links" aria-label="主导航">
       <a href="index.html">首页</a>
       <a href="about.html">关于我们</a>
       <a href="products.html" class="active">产品中心</a>
@@ -30,12 +39,24 @@
   </div>
 </header>
 
+<main>
 <section class="page-banner">
   <div class="container">
     <h1 class="page-banner-title">产品中心</h1>
     <p class="breadcrumb"><a href="index.html">首页</a> / 产品中心</p>
   </div>
 </section>
+
+<nav class="product-anchor-nav" aria-label="产品分类导航">
+  <div class="container">
+    <a href="#adhesives">胶粘剂</a>
+    <a href="#coatings">涂料</a>
+    <a href="#oils">油品</a>
+    <a href="#medical">医疗</a>
+    <a href="#energy">节能</a>
+    <a href="#magnets">磁性材料</a>
+  </div>
+</nav>
 
 <!-- Product Overview -->
 <section class="section">
@@ -86,17 +107,21 @@
     <p class="section-label" style="text-align:center;">固化方式分类</p>
     <h2 class="section-title" style="text-align:center;">多种固化方式，适配不同工艺需求</h2>
     <div class="curing-tags">
-      <span class="curing-tag">机械装配</span>
-      <span class="curing-tag">导电</span>
-      <span class="curing-tag">导热</span>
-      <span class="curing-tag">应力分散加热</span>
-      <span class="curing-tag">吸潮固化</span>
-      <span class="curing-tag">紫外线（UV）</span>
-      <span class="curing-tag">UV + 吸潮</span>
-      <span class="curing-tag">UV + 热固</span>
-      <span class="curing-tag">双组份混合</span>
-      <span class="curing-tag">促进剂</span>
-      <span class="curing-tag">PSA 光学特性</span>
+      <div class="curing-tags-row">
+        <span class="curing-tag">机械装配</span>
+        <span class="curing-tag">导电</span>
+        <span class="curing-tag">导热</span>
+        <span class="curing-tag">应力分散加热</span>
+        <span class="curing-tag">吸潮固化</span>
+        <span class="curing-tag">紫外线（UV）</span>
+      </div>
+      <div class="curing-tags-row">
+        <span class="curing-tag">UV + 吸潮</span>
+        <span class="curing-tag">UV + 热固</span>
+        <span class="curing-tag">双组份混合</span>
+        <span class="curing-tag">促进剂</span>
+        <span class="curing-tag">PSA 光学特性</span>
+      </div>
     </div>
   </div>
 </section>
@@ -105,7 +130,7 @@
 <section class="product-detail" id="adhesives-auto">
   <div class="container">
     <div class="product-detail-img">
-      <img src="assets/images/Cars_1.jpg" alt="汽车内饰胶粘剂" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="assets/images/Cars_1.webp" alt="汽车内饰胶粘剂" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">胶水类 · 汽车内饰</p>
@@ -156,7 +181,7 @@
 <section class="product-detail" id="adhesives">
   <div class="container">
     <div class="product-detail-img">
-      <img src="assets/images/adhesives.jpg" alt="胶水类产品" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="assets/images/adhesives.webp" alt="胶水类产品" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">胶水类产品</p>
@@ -190,7 +215,8 @@
 <section class="product-detail" id="adhesives-packaging">
   <div class="container">
     <div class="product-detail-img">
-      <img src="assets/images/package.jpg" alt="包装胶粘剂" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="assets/images/adhesives.webp" alt="胶粘剂产品图片" loading="lazy" data-lightbox>
+      <p class="media-caption">胶粘剂产品图片；具体品牌、型号和包装规格以实际供货为准。</p>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">胶水类 · 包装行业</p>
@@ -200,7 +226,7 @@
       </p>
       <div class="product-models">
         <h4>核心产品型号</h4>
-        <div class="model-table">
+        <div class="model-table model-table-2col">
           <div class="model-row model-row-header">
             <span>应用场景</span><span>产品型号</span>
           </div>
@@ -223,7 +249,7 @@
 <section class="product-detail" id="coatings">
   <div class="container">
     <div class="product-detail-img">
-      <img src="assets/images/coatings.jpg" alt="涂料类产品" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="assets/images/coatings.webp" alt="涂料类产品" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">涂料类产品</p>
@@ -240,7 +266,7 @@
 <section class="product-detail" id="oils">
   <div class="container">
     <div class="product-detail-img">
-      <img src="assets/images/oils.jpg" alt="油品类产品" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="assets/images/oils.webp" alt="油品类产品" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">油品类产品</p>
@@ -257,7 +283,7 @@
 <section class="product-detail" id="medical">
   <div class="container">
     <div class="product-detail-img">
-      <img src="assets/images/medical.jpg" alt="医疗类产品" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="assets/images/medical.webp" alt="医疗类产品" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">医疗类产品</p>
@@ -274,7 +300,7 @@
 <section class="product-detail" id="energy">
   <div class="container">
     <div class="product-detail-img">
-      <img src="assets/images/energy.jpg" alt="节能类产品" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="assets/images/energy.webp" alt="节能类产品" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">节能类产品</p>
@@ -291,7 +317,7 @@
 <section class="product-detail" id="magnets">
   <div class="container">
     <div class="product-detail-img">
-      <img src="assets/images/magnets.jpg" alt="磁石类产品" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="assets/images/magnets.webp" alt="磁石类产品" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">磁石类产品</p>
@@ -308,10 +334,11 @@
 <section class="section section-gray">
   <div class="container">
     <p class="section-label" style="text-align:center;">研发支持</p>
-    <h2 class="section-title" style="text-align:center;">专业研发设备，保障产品品质</h2>
-    <p class="section-desc">我们配备完善的研发检测设备，确保每一批次产品的性能稳定与品质可靠</p>
-    <div style="max-width:800px;margin:0 auto 30px;">
-      <img src="assets/images/R&D.jpg" alt="研发实验室" style="width:100%;border-radius:8px;box-shadow:var(--shadow-lg);" loading="lazy" data-lightbox onerror="this.style.display='none'">
+    <h2 class="section-title" style="text-align:center;">研发检测支持，助力品质评估</h2>
+    <p class="section-desc">我们配备多类研发检测设备，用于支持材料性能评估、工艺验证与质量管理</p>
+    <div class="rd-lab-wrap">
+      <img class="rd-lab-image" src="assets/images/rd-lab-generated.png" alt="工业材料研发检测实验室示意图" width="1024" height="1024" loading="lazy" data-lightbox>
+      <p class="media-caption">研发检测实验室示意图；具体设备配置和检测项目以实际条件为准。</p>
     </div>
     <div class="rd-equipment-grid">
       <div class="rd-equipment-card">
@@ -352,13 +379,15 @@
   </div>
 </section>
 
+</main>
+
 <footer class="site-footer">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-col">
         <h4>裕荣机电（大连）有限公司</h4>
         <p>Yu Rong Mechanical and Electrical (Dalian) CO., Ltd.</p>
-        <p style="margin-top:8px;">专注于化学品代理销售与技术服务。</p>
+        <p>专注于化学品代理销售与技术服务。</p>
       </div>
       <div class="footer-col">
         <h4>快速导航</h4>
@@ -384,8 +413,9 @@
       <div class="footer-col">
         <h4>联系方式</h4>
         <p>📍 大连保税区豪轩国际大厦6层</p>
-        <p>📧 shmay@sina.com</p>
-        <p>📞 0411-66164032</p>
+        <p>📧 <a href="mailto:shmay@sina.com">shmay@sina.com</a></p>
+        <p>📱 <a href="tel:13624980064">13624980064</a></p>
+        <p>📞 <a href="tel:04116616403286">0411-66164032-86</a></p>
       </div>
     </div>
     <div class="footer-bottom">

@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Products — YuRong distributes adhesives, coatings, oils, medical, energy-saving, and magnetic materials across six major product lines">
   <title>Products — Yu Rong Mechanical and Electrical (Dalian) Co., Ltd.</title>
+  <link rel="canonical" href="products.html">
+  <link rel="alternate" hreflang="zh-CN" href="../products.html">
+  <link rel="alternate" hreflang="en" href="products.html">
+  <link rel="alternate" hreflang="x-default" href="../products.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Products — Yu Rong Mechanical and Electrical (Dalian) Co., Ltd.">
+  <meta property="og:description" content="Explore six product lines including adhesives, coatings, oils, medical, energy-saving, and magnetic materials.">
+  <meta property="og:url" content="products.html">
+  <meta property="og:image" content="../assets/images/adhesives.webp">
   <link rel="stylesheet" href="../assets/css/style.css">
   <link rel="icon" type="image/svg+xml" href="../assets/images/LOGO_2.svg">
 </head>
@@ -13,13 +22,13 @@
 <header class="site-header">
   <div class="header-inner">
     <a href="index.html" class="logo">
-      <img src="../assets/images/LOGO.svg" alt="YuRong Logo" onerror="this.style.display='none'">
+      <img src="../assets/images/LOGO.svg" alt="YuRong Logo">
       <span>Yu Rong M&E (Dalian) Co., Ltd.</span>
     </a>
-    <button class="hamburger" aria-label="Menu">
+    <button class="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="primary-nav">
       <span></span><span></span><span></span>
     </button>
-    <nav class="nav-links">
+    <nav id="primary-nav" class="nav-links" aria-label="Primary navigation">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="products.html" class="active">Products</a>
@@ -30,12 +39,24 @@
   </div>
 </header>
 
+<main>
 <section class="page-banner">
   <div class="container">
     <h1 class="page-banner-title">Products</h1>
     <p class="breadcrumb"><a href="index.html">Home</a> / Products</p>
   </div>
 </section>
+
+<nav class="product-anchor-nav" aria-label="Product category navigation">
+  <div class="container">
+    <a href="#adhesives">Adhesives</a>
+    <a href="#coatings">Coatings</a>
+    <a href="#oils">Oils</a>
+    <a href="#medical">Medical</a>
+    <a href="#energy">Energy</a>
+    <a href="#magnets">Magnetic Materials</a>
+  </div>
+</nav>
 
 <!-- Product Overview -->
 <section class="section">
@@ -85,17 +106,21 @@
     <p class="section-label" style="text-align:center;">Curing Methods</p>
     <h2 class="section-title" style="text-align:center;">Multiple Curing Methods for Different Processes</h2>
     <div class="curing-tags">
-      <span class="curing-tag">Mechanical Assembly</span>
-      <span class="curing-tag">Electrically Conductive</span>
-      <span class="curing-tag">Thermally Conductive</span>
-      <span class="curing-tag">Stress-Dispersing Heat</span>
-      <span class="curing-tag">Moisture Curing</span>
-      <span class="curing-tag">UV Curing</span>
-      <span class="curing-tag">UV + Moisture</span>
-      <span class="curing-tag">UV + Heat</span>
-      <span class="curing-tag">2-Component Mix</span>
-      <span class="curing-tag">Accelerator</span>
-      <span class="curing-tag">PSA Optical</span>
+      <div class="curing-tags-row">
+        <span class="curing-tag">Mechanical Assembly</span>
+        <span class="curing-tag">Electrically Conductive</span>
+        <span class="curing-tag">Thermally Conductive</span>
+        <span class="curing-tag">Stress-Dispersing Heat</span>
+        <span class="curing-tag">Moisture Curing</span>
+        <span class="curing-tag">UV Curing</span>
+      </div>
+      <div class="curing-tags-row">
+        <span class="curing-tag">UV + Moisture</span>
+        <span class="curing-tag">UV + Heat</span>
+        <span class="curing-tag">2-Component Mix</span>
+        <span class="curing-tag">Accelerator</span>
+        <span class="curing-tag">PSA Optical</span>
+      </div>
     </div>
   </div>
 </section>
@@ -104,7 +129,7 @@
 <section class="product-detail" id="adhesives-auto">
   <div class="container">
     <div class="product-detail-img">
-      <img src="../assets/images/Cars_1.jpg" alt="Automotive Interior Adhesives" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="../assets/images/Cars_1.webp" alt="Automotive Interior Adhesives" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">Adhesives · Automotive Interior</p>
@@ -155,7 +180,7 @@
 <section class="product-detail" id="adhesives">
   <div class="container">
     <div class="product-detail-img">
-      <img src="../assets/images/adhesives.jpg" alt="Adhesive Products" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="../assets/images/adhesives.webp" alt="Adhesive Products" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">Adhesive Products</p>
@@ -189,7 +214,8 @@
 <section class="product-detail" id="adhesives-packaging">
   <div class="container">
     <div class="product-detail-img">
-      <img src="../assets/images/package.jpg" alt="Packaging Adhesives" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="../assets/images/adhesives.webp" alt="Adhesive product image" loading="lazy" data-lightbox>
+      <p class="media-caption">Adhesive product image; exact brands, models, and packaging specifications are subject to actual supply.</p>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">Adhesives · Packaging</p>
@@ -199,7 +225,7 @@
       </p>
       <div class="product-models">
         <h4>Key Product Models</h4>
-        <div class="model-table">
+        <div class="model-table model-table-2col">
           <div class="model-row model-row-header">
             <span>Application</span><span>Models</span>
           </div>
@@ -222,7 +248,7 @@
 <section class="product-detail" id="coatings">
   <div class="container">
     <div class="product-detail-img">
-      <img src="../assets/images/coatings.jpg" alt="Coating Products" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="../assets/images/coatings.webp" alt="Coating Products" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">Coating Products</p>
@@ -239,7 +265,7 @@
 <section class="product-detail" id="oils">
   <div class="container">
     <div class="product-detail-img">
-      <img src="../assets/images/oils.jpg" alt="Oil & Lubricant Products" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="../assets/images/oils.webp" alt="Oil & Lubricant Products" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">Oils & Lubricants</p>
@@ -256,7 +282,7 @@
 <section class="product-detail" id="medical">
   <div class="container">
     <div class="product-detail-img">
-      <img src="../assets/images/medical.jpg" alt="Medical Products" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="../assets/images/medical.webp" alt="Medical Products" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">Medical Products</p>
@@ -273,7 +299,7 @@
 <section class="product-detail" id="energy">
   <div class="container">
     <div class="product-detail-img">
-      <img src="../assets/images/energy.jpg" alt="Energy-Saving Products" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="../assets/images/energy.webp" alt="Energy-Saving Products" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">Energy-Saving Products</p>
@@ -290,7 +316,7 @@
 <section class="product-detail" id="magnets">
   <div class="container">
     <div class="product-detail-img">
-      <img src="../assets/images/magnets.jpg" alt="Magnetic Products" loading="lazy" data-lightbox onerror="this.style.background='#e8f0f8';this.style.minHeight='300px'">
+      <img src="../assets/images/magnets.webp" alt="Magnetic Products" loading="lazy" data-lightbox>
     </div>
     <div class="product-detail-text">
       <p class="product-detail-label">Magnetic Materials</p>
@@ -307,10 +333,11 @@
 <section class="section section-gray">
   <div class="container">
     <p class="section-label" style="text-align:center;">R&D Support</p>
-    <h2 class="section-title" style="text-align:center;">Professional R&D Equipment Ensuring Product Quality</h2>
-    <p class="section-desc">Equipped with comprehensive R&D testing equipment to ensure stable performance and reliable quality for every batch</p>
-    <div style="max-width:800px;margin:0 auto 30px;">
-      <img src="../assets/images/R&D.jpg" alt="R&D Laboratory" style="width:100%;border-radius:8px;box-shadow:var(--shadow-lg);" loading="lazy" data-lightbox onerror="this.style.display='none'">
+    <h2 class="section-title" style="text-align:center;">R&D Testing Support for Quality Evaluation</h2>
+    <p class="section-desc">A range of R&D testing equipment supports material evaluation, process validation, and quality management</p>
+    <div class="rd-lab-wrap">
+      <img class="rd-lab-image" src="../assets/images/rd-lab-generated.png" alt="Illustration of an industrial materials R&D testing laboratory" width="1024" height="1024" loading="lazy" data-lightbox>
+      <p class="media-caption">Illustrative R&amp;D testing laboratory scene; actual equipment and test scope depend on project requirements.</p>
     </div>
     <div class="rd-equipment-grid">
       <div class="rd-equipment-card">
@@ -351,13 +378,15 @@
   </div>
 </section>
 
+</main>
+
 <footer class="site-footer">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-col">
         <h4>Yu Rong M&E (Dalian) Co., Ltd.</h4>
         <p>Yu Rong Mechanical and Electrical (Dalian) CO., Ltd.</p>
-        <p style="margin-top:8px;">Specialized in chemical agent distribution and technical services.</p>
+        <p>Specialized in chemical agent distribution and technical services.</p>
       </div>
       <div class="footer-col">
         <h4>Quick Links</h4>
@@ -383,8 +412,9 @@
       <div class="footer-col">
         <h4>Contact</h4>
         <p>📍 6F, HaoXuan Mansion, Dalian F.T.Z</p>
-        <p>📧 shmay@sina.com</p>
-        <p>📞 0411-66164032</p>
+        <p>📧 <a href="mailto:shmay@sina.com">shmay@sina.com</a></p>
+        <p>📱 <a href="tel:13624980064">13624980064</a></p>
+        <p>📞 <a href="tel:04116616403286">0411-66164032-86</a></p>
       </div>
     </div>
     <div class="footer-bottom">

@@ -9,27 +9,42 @@ document.addEventListener('DOMContentLoaded', function() {
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.nav-links');
 
-  if (hamburger) {
+  function setMenuState(isOpen) {
+    if (!hamburger || !navLinks) return;
+    hamburger.classList.toggle('active', isOpen);
+    navLinks.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+  }
+
+  if (hamburger && navLinks) {
     hamburger.addEventListener('click', function() {
-      this.classList.toggle('active');
-      navLinks.classList.toggle('open');
+      setMenuState(!hamburger.classList.contains('active'));
     });
   }
 
   // Close mobile menu when clicking a link
   document.querySelectorAll('.nav-links a').forEach(function(link) {
     link.addEventListener('click', function() {
-      if (hamburger && hamburger.classList.contains('active')) {
-        hamburger.classList.remove('active');
-        navLinks.classList.remove('open');
-      }
+      setMenuState(false);
     });
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && hamburger && hamburger.classList.contains('active')) {
+      setMenuState(false);
+      hamburger.focus();
+    }
+  });
+
+  window.addEventListener('resize', function() {
+    if (window.innerWidth > 900) setMenuState(false);
   });
 
   // --- Header scroll effect ---
   const header = document.querySelector('.site-header');
 
   function updateHeader() {
+    if (!header) return;
     if (window.scrollY > 50) {
       header.classList.add('scrolled');
     } else {
@@ -94,11 +109,12 @@ document.addEventListener('DOMContentLoaded', function() {
             var progress = Math.min((timestamp - startTime) / duration, 1);
             // Ease out
             progress = 1 - Math.pow(1 - progress, 3);
-            counter.textContent = Math.floor(progress * target);
+            var suffix = counter.getAttribute('data-suffix') || '';
+            counter.textContent = Math.floor(progress * target) + suffix;
             if (progress < 1) {
               requestAnimationFrame(step);
             } else {
-              counter.textContent = target;
+              counter.textContent = target + suffix;
             }
           }
           requestAnimationFrame(step);
@@ -362,7 +378,11 @@ function initLightbox() {
   // Build lightbox DOM once
   var lightbox = document.createElement('div');
   lightbox.className = 'lightbox';
+  lightbox.setAttribute('role', 'dialog');
+  lightbox.setAttribute('aria-modal', 'true');
   lightbox.setAttribute('aria-label', '图片预览');
+  lightbox.setAttribute('aria-hidden', 'true');
+  lightbox.setAttribute('tabindex', '-1');
   lightbox.innerHTML =
     '<div class="lightbox-img-wrap">' +
       '<button class="lightbox-close" aria-label="关闭">&times;</button>' +
@@ -379,22 +399,42 @@ function initLightbox() {
   var lightboxPrev = lightbox.querySelector('.lightbox-prev');
   var lightboxNext = lightbox.querySelector('.lightbox-next');
   var currentIndex = -1;
+  var lastFocusedElement = null;
+  var previousBodyOverflow = '';
+
+  function getFocusableElements() {
+    return Array.from(lightbox.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])'))
+      .filter(function(element) { return !element.hasAttribute('disabled'); });
+  }
 
   function openLightbox(index) {
     if (index < 0 || index >= lightboxImages.length) return;
     currentIndex = index;
     var img = lightboxImages[currentIndex];
+    if (!lightbox.classList.contains('open')) {
+      lastFocusedElement = document.activeElement;
+    }
     lightboxImg.src = img.src;
     lightboxImg.alt = img.alt || '';
     lightboxCaption.textContent = img.alt || '';
     lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    previousBodyOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     updateNavVisibility();
+    window.setTimeout(function() { lightboxClose.focus(); }, 0);
   }
 
   function closeLightbox() {
+    if (!lightbox.classList.contains('open')) return;
     lightbox.classList.remove('open');
-    document.body.style.overflow = '';
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = previousBodyOverflow;
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+      lastFocusedElement.focus();
+    }
+    lastFocusedElement = null;
+    currentIndex = -1;
     // Clear src after transition to free memory
     setTimeout(function() {
       if (!lightbox.classList.contains('open')) {
@@ -420,7 +460,18 @@ function initLightbox() {
 
   // Attach click handlers to each lightbox image
   lightboxImages.forEach(function(img, index) {
+    if (!img.closest('a')) {
+      img.setAttribute('tabindex', '0');
+      img.setAttribute('role', 'button');
+      img.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLightbox(index);
+        }
+      });
+    }
     img.addEventListener('click', function(e) {
+      if (img.closest('a')) return;
       e.preventDefault();
       openLightbox(index);
     });
@@ -437,8 +488,34 @@ function initLightbox() {
   // Keyboard navigation
   document.addEventListener('keydown', function(e) {
     if (!lightbox.classList.contains('open')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') showPrev(e);
-    if (e.key === 'ArrowRight') showNext(e);
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeLightbox();
+    }
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      showPrev(e);
+    }
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      showNext(e);
+    }
+    if (e.key === 'Tab') {
+      var focusable = getFocusableElements();
+      if (focusable.length === 0) {
+        e.preventDefault();
+        lightboxClose.focus();
+        return;
+      }
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
   });
 }
