@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // --- Active nav link based on current page ---
   function highlightCurrentNav() {
     var path = window.location.pathname;
-    var page = path.split('/').pop() || 'index.html';
+    var page = document.body.dataset.navPage || path.split('/').pop() || 'index.html';
 
     document.querySelectorAll('.nav-links a').forEach(function(link) {
       var href = link.getAttribute('href');

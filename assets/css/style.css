@@ -686,6 +686,7 @@ button:focus-visible,
 /* Product section shortcuts stay visible without covering the page header. */
 .product-anchor-nav {
   position: sticky;
+  scrollbar-width: none;
   top: var(--header-height);
   z-index: 20;
   background: rgba(255,255,255,0.96);
@@ -705,6 +706,7 @@ button:focus-visible,
   -ms-overflow-style: none;
 }
 .product-anchor-nav .container::-webkit-scrollbar { display: none; }
+.product-anchor-nav::-webkit-scrollbar { display: none; }
 .product-anchor-nav a {
   flex: 0 0 auto;
   padding: 7px 16px;
@@ -1204,6 +1206,56 @@ button:focus-visible,
 }
 
 /* --- Product Models Table --- */
+.catalog-heading { text-align: center; }
+.category-card { scroll-margin-top: calc(var(--header-height) + 24px); }
+.category-card .product-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.category-card .product-card-desc { flex: 1; }
+.category-card-link {
+  margin-top: 20px;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.product-anchor-nav a[aria-current="page"] {
+  background: var(--primary);
+  color: var(--white);
+}
+.catalog-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.catalog-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+.catalog-table th {
+  background: var(--primary);
+  color: var(--white);
+}
+.catalog-table th, .catalog-table td {
+  padding: 18px 20px;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+.catalog-table td:first-child { width: 23%; font-weight: 600; }
+.catalog-table td:nth-child(2) { width: 30%; }
+.catalog-table tbody tr:last-child td { border-bottom: none; }
+.catalog-table tbody tr:nth-child(even) { background: var(--white); }
+.catalog-note { margin-top: 16px; color: var(--text-light); font-size: 0.88rem; }
+.catalog-actions { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+.product-detail .container > * { min-width: 0; }
+@media (max-width: 768px) {
+  .catalog-table th, .catalog-table td { padding: 12px 10px; font-size: 0.8rem; }
+}
+
 .product-models {
   margin-top: 24px;
 }
