@@ -19,3 +19,7 @@ build/
 
 # Logs
 *.log
+
+# Local agent instructions
+AGENTS.md
+AGENT.md
