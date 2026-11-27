@@ -133,6 +133,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // --- Image Lightbox ---
   initLightbox();
 
+  // --- Project Category Filter ---
+  initProjectFilter();
+
+  // --- Contact Inquiry Context (?product=...) ---
+  initInquiryContext();
+
 });
 
 /**
@@ -518,4 +524,71 @@ function initLightbox() {
       }
     }
   });
+}
+
+/**
+ * Initialize project category filter tabs on projects pages.
+ */
+function initProjectFilter() {
+  var tabs = document.querySelectorAll('[data-project-filter]');
+  var groups = document.querySelectorAll('[data-project-group]');
+  if (tabs.length === 0 || groups.length === 0) return;
+
+  function applyFilter(category) {
+    tabs.forEach(function(tab) {
+      var isActive = tab.getAttribute('data-project-filter') === category;
+      tab.setAttribute('aria-pressed', String(isActive));
+    });
+    groups.forEach(function(group) {
+      var groupCat = group.getAttribute('data-project-group');
+      var shouldShow = category === 'all' || groupCat === category;
+      group.classList.toggle('is-hidden', !shouldShow);
+    });
+  }
+
+  tabs.forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      applyFilter(tab.getAttribute('data-project-filter'));
+    });
+  });
+
+  // Support optional ?tab=materials or ?tab=environment query parameter
+  var params = new URLSearchParams(window.location.search);
+  var initialTab = params.get('tab');
+  if (initialTab && document.querySelector('[data-project-filter="' + initialTab + '"]')) {
+    applyFilter(initialTab);
+  }
+}
+
+/**
+ * Read ?product=... query parameter on contact pages to display inquiry context
+ * and prefill a ready-to-send mailto link.
+ */
+function initInquiryContext() {
+  var banner = document.querySelector('[data-inquiry-banner]');
+  if (!banner) return;
+
+  var params = new URLSearchParams(window.location.search);
+  var product = (params.get('product') || '').trim();
+  if (!product) return;
+
+  var isEn = (document.documentElement.lang || '').toLowerCase().indexOf('en') === 0;
+  var nameEl = banner.querySelector('[data-inquiry-product]');
+  var mailBtn = banner.querySelector('[data-inquiry-mailto]');
+
+  if (nameEl) nameEl.textContent = product;
+  if (mailBtn) {
+    var subject = isEn
+      ? 'Product Inquiry: ' + product
+      : '产品咨询与报价需求：' + product;
+    var body = isEn
+      ? 'Hello Yu Rong M&E Team,\n\nI would like to inquire about "' + product + '".\n\nApplication / Requirements:\nCompany Name:\nContact Phone:\n'
+      : '您好，裕荣机电团队：\n\n我想咨询「' + product + '」相关产品的型号、规格与报价支持。\n\n应用场景/工艺需求：\n公司名称：\n联系电话：\n';
+    mailBtn.setAttribute(
+      'href',
+      'mailto:shmay@sina.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body)
+    );
+  }
+
+  banner.hidden = false;
 }
