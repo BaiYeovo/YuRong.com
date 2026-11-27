@@ -23,6 +23,7 @@ build/
 # Local agent instructions
 AGENTS.md
 AGENT.md
+.agents/
 
 # Local unused image backups (not pushed to GitHub)
 unused-assets-backup/
